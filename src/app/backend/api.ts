@@ -74,6 +74,23 @@ export const createPost = async (
   }
 };
 
+export const deletePost = async (id: string): Promise<boolean> => {
+  try {
+    const response = await fetch(`${API_BASE}/posts.php`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+
+    const data = await response.json();
+    if (data.success) return true;
+    throw new Error(data.error || 'Failed to delete post');
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    return false;
+  }
+};
+
 export const fetchUserSettings = async (): Promise<UserSettings | null> => {
   try {
     const response = await fetch(`${API_BASE}/user_settings.php`, {
@@ -81,7 +98,6 @@ export const fetchUserSettings = async (): Promise<UserSettings | null> => {
     });
     if (!response.ok) throw new Error('Failed to fetch user settings');
     const settings: UserSettings = await response.json();
-    setUserSettings(settings);
     return settings;
   } catch (error) {
     console.error('Error fetching user settings:', error);

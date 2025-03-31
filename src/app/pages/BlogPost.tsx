@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchPostById } from '../backend/api';
+import { useParams, useNavigate } from 'react-router-dom';
+import { fetchPostById, deletePost } from '../backend/api';
 import { BlogPost } from '../model/BlogPostModel';
 
 const BlogPostPage = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [post, setPost] = useState<BlogPost | null>(null);
 
   useEffect(() => {
@@ -21,6 +22,18 @@ const BlogPostPage = () => {
     }
   }, [id]);
 
+  const handleDelete = async () => {
+    if (id && window.confirm('Are you sure you want to delete this post?')) {
+      const success = await deletePost(id);
+      if (success) {
+        alert('Post deleted successfully!');
+        navigate('/'); // Redirect to the blog list
+      } else {
+        alert('Failed to delete the post.');
+      }
+    }
+  };
+
   if (!post) return <p className="loading">Loading...</p>;
 
   return (
@@ -34,6 +47,14 @@ const BlogPostPage = () => {
         <strong>Tags:</strong>{' '}
         {post.tags.length > 0 ? post.tags.join(', ') : 'No tags'}
       </p>
+      <div className="post-actions">
+        <button className="edit-button" onClick={() => navigate(`/edit/${id}`)}>
+          ✏️ Edit
+        </button>
+        <button className="delete-button" onClick={handleDelete}>
+          🗑️ Delete
+        </button>
+      </div>
       <a href="/" className="back-link">
         ⬅ Back to Blog List
       </a>

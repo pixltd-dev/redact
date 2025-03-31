@@ -12,18 +12,17 @@ const App = () => {
   const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
 
   useEffect(() => {
-    checkAndSetupDatabase();
+    const loadUserSettings = async () => {
+      try {
+        const settings = await getUserSettings();
+        setUserSettings(settings);
+      } catch (error) {
+        console.error('Error loading user settings:', error);
+      }
+    };
+
     loadUserSettings();
   }, []);
-
-  const loadUserSettings = async () => {
-    try {
-      const settings = await getUserSettings();
-      setUserSettings(settings);
-    } catch (error) {
-      console.error('Error loading user settings:', error);
-    }
-  };
 
   return (
     <>

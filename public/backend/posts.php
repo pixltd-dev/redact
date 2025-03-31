@@ -6,7 +6,7 @@ if ($_SERVER['HTTP_HOST'] === 'localhost:8001') { // Only enable CORS in develop
         header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");;
     }
 }
-header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Methods: POST, OPTIONS, DELETE, PUT, GET");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 $db = new PDO("sqlite:redact.db");
@@ -20,9 +20,6 @@ switch ($method) {
         break;
     case 'POST':
         createPost();
-        break;
-    case 'PUT':
-        updatePost();
         break;
     case 'DELETE':
         deletePost();
@@ -56,48 +53,41 @@ function getPosts() {
     }
 }
 
-// 📌 Function to create a new post
+// 📌 Function to create/update a post
 function createPost() {
     global $db;
 
     $data = json_decode(file_get_contents("php://input"), true);
-    if (!isset($data["title"], $data["content"])) {
-        echo json_encode(["error" => "Missing title or content"]);
+    if (!isset($data["id"], $data["title"], $data["content"])) {
+        echo json_encode(["error" => "Missing id, title, or content"]);
         return;
     }
 
-    $id = uniqid();
+    $id = $data["id"] ?? uniqid(); // Use provided ID or generate a new one
     $title = $data["title"];
     $content = $data["content"];
     $tags = isset($data["tags"]) ? implode(",", $data["tags"]) : "";
 
-    $stmt = $db->prepare("INSERT INTO posts (id, title, content, tags) VALUES (?, ?, ?, ?)");
+    // Insert or update the post
+    $stmt = $db->prepare("
+        INSERT INTO posts (id, title, content, tags) 
+        VALUES (?, ?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET 
+            title = excluded.title,
+            content = excluded.content,
+            tags = excluded.tags
+    ");
     $stmt->execute([$id, $title, $content, $tags]);
 
     echo json_encode(["success" => true, "id" => $id]);
-}
-
-// 📌 Function to update a post
-function updatePost() {
-    global $db;
-
-    $data = json_decode(file_get_contents("php://input"), true);
-    if (!isset($data["id"], $data["title"], $data["content"])) {
-        echo json_encode(["error" => "Missing fields"]);
-        return;
-    }
-
-    $stmt = $db->prepare("UPDATE posts SET title = ?, content = ?, tags = ? WHERE id = ?");
-    $stmt->execute([$data["title"], $data["content"], implode(",", $data["tags"] ?? []), $data["id"]]);
-
-    echo json_encode(["success" => true]);
 }
 
 // 📌 Function to delete a post
 function deletePost() {
     global $db;
 
-    parse_str(file_get_contents("php://input"), $data);
+    // Decode JSON input
+    $data = json_decode(file_get_contents("php://input"), true);
     if (!isset($data["id"])) {
         echo json_encode(["error" => "Missing post ID"]);
         return;

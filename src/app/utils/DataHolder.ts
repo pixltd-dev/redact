@@ -5,7 +5,10 @@ let userSetttings: UserSettings | undefined;
 
 export const getUserSettings = async (): Promise<UserSettings> => {
   if (!userSetttings) {
-    await fetchUserSettings();
+    const fetchedSettings = await fetchUserSettings();
+    if (fetchedSettings !== null) {
+      userSetttings = fetchedSettings;
+    }
   }
   if (!userSetttings) {
     throw new Error('User settings have not been initialized.');
