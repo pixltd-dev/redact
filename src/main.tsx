@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import * as ReactDOM from 'react-dom/client';
 import App from './app/app';
 import { checkAndSetupDatabase } from './app/backend/api';
-import { getUserSettings } from './app/utils/DataHolder';
+import { getHolderUserSettings } from './app/utils/DataHolder';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

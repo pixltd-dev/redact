@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { UserSettings } from '../model/UserSettings';
 import { fetchUserSettings, updateUserSettings } from '../backend/api';
-import { setUserSettings } from '../utils/DataHolder';
+import { setHolderUserSettings } from '../utils/DataHolder';
 
 const UserSettingsEditor: React.FC = () => {
   const [settings, setSettings] = useState<UserSettings | null>(null);
@@ -36,7 +36,8 @@ const UserSettingsEditor: React.FC = () => {
       try {
         const success = await updateUserSettings(settings);
         if (success) {
-          setUserSettings(settings); // Update the local data holder
+          setHolderUserSettings(settings);
+          window.location.reload();
           alert('Settings saved successfully!');
         } else {
           throw new Error('Failed to save settings.');

@@ -4,25 +4,30 @@ import BlogPost from './pages/BlogPost';
 import BlogEditor from './pages/BlogEditor';
 import { useEffect, useState } from 'react';
 import { checkAndSetupDatabase } from './backend/api';
-import { getUserSettings } from './utils/DataHolder';
+import { getHolderUserSettings, userSettingsHolder } from './utils/DataHolder';
 import { UserSettings } from './model/UserSettings';
 import UserSettingsEditor from './pages/UserSettingsEditor';
 
 const App = () => {
   const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
 
-  useEffect(() => {
-    const loadUserSettings = async () => {
-      try {
-        const settings = await getUserSettings();
-        setUserSettings(settings);
-      } catch (error) {
-        console.error('Error loading user settings:', error);
-      }
-    };
+  const loadUserSettings = async () => {
+    try {
+      const settings = await getHolderUserSettings();
+      setUserSettings(settings);
+      console.log('User settings loaded:', settings);
+    } catch (error) {
+      console.error('Error loading user settings:', error);
+    }
+  };
 
+  useEffect(() => {
     loadUserSettings();
   }, []);
+
+  useEffect(() => {
+    loadUserSettings();
+  }, [userSettingsHolder]);
 
   return (
     <>

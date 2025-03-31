@@ -1,6 +1,6 @@
 import { BlogPost } from '../model/BlogPostModel';
 import { UserSettings } from '../model/UserSettings';
-import { setUserSettings } from '../utils/DataHolder';
+import { setHolderUserSettings } from '../utils/DataHolder';
 
 const API_BASE =
   process.env.NODE_ENV === 'development'
@@ -98,6 +98,7 @@ export const fetchUserSettings = async (): Promise<UserSettings | null> => {
     });
     if (!response.ok) throw new Error('Failed to fetch user settings');
     const settings: UserSettings = await response.json();
+    setHolderUserSettings(settings);
     return settings;
   } catch (error) {
     console.error('Error fetching user settings:', error);
