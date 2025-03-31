@@ -1,4 +1,6 @@
 import { BlogPost } from '../model/BlogPostModel';
+import { UserSettings } from '../model/UserSettings';
+import { setUserSettings } from '../utils/DataHolder';
 
 const API_BASE =
   process.env.NODE_ENV === 'development'
@@ -69,5 +71,38 @@ export const createPost = async (
   } catch (error) {
     console.error('Error creating post:', error);
     return null;
+  }
+};
+
+export const fetchUserSettings = async (): Promise<UserSettings | null> => {
+  try {
+    const response = await fetch(`${API_BASE}/user_settings.php`, {
+      method: 'GET',
+    });
+    if (!response.ok) throw new Error('Failed to fetch user settings');
+    const settings: UserSettings = await response.json();
+    setUserSettings(settings);
+    return settings;
+  } catch (error) {
+    console.error('Error fetching user settings:', error);
+    return null;
+  }
+};
+
+export const updateUserSettings = async (
+  settings: UserSettings
+): Promise<boolean> => {
+  try {
+    const response = await fetch(`${API_BASE}/user_settings.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(settings),
+    });
+    const data = await response.json();
+    if (data.success) return true;
+    throw new Error(data.error || 'Failed to update user settings');
+  } catch (error) {
+    console.error('Error updating user settings:', error);
+    return false;
   }
 };

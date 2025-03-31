@@ -1,61 +1,44 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { createPost, fetchPostById } from '../backend/api';
+import { useParams } from 'react-router-dom';
+import { fetchPostById } from '../backend/api';
 import { BlogPost } from '../model/BlogPostModel';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 
-const BlogEditorPage = () => {
-  const { id } = useParams<{ id?: string }>();
-  const navigate = useNavigate();
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [tags, setTags] = useState('');
+const BlogPostPage = () => {
+  const { id } = useParams<{ id: string }>();
+  const [post, setPost] = useState<BlogPost | null>(null);
 
   useEffect(() => {
     if (id) {
-      fetchPostById(id).then((post) => {
-        if (post) {
-          setTitle(post.title);
-          setContent(post.content);
-          // Convert tags to a proper format
-          setTags(post.tags?.join(', '));
+      fetchPostById(id).then((data) => {
+        if (data) {
+          data.tags =
+            typeof data.tags === 'string'
+              ? (data.tags as string).split(',').map((t) => t.trim())
+              : [];
+          setPost(data);
         }
       });
     }
   }, [id]);
 
-  const handleSave = async () => {
-    const postData: Omit<BlogPost, 'id'> = {
-      title,
-      content,
-      tags: tags.split(',').map((t) => t.trim()), // Convert string to array before saving
-    };
-
-    await createPost(postData);
-    navigate('/');
-  };
+  if (!post) return <p className="loading">Loading...</p>;
 
   return (
-    <div>
-      <h2>{id ? 'Edit Post' : 'New Post'}</h2>
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Title"
+    <div className="blog-post">
+      <h2 className="post-title">{post.title}</h2>
+      <div
+        className="post-content"
+        dangerouslySetInnerHTML={{ __html: post.content }}
       />
-      <ReactQuill value={content} onChange={setContent} />
-      <input
-        type="text"
-        value={tags}
-        onChange={(e) => setTags(e.target.value)}
-        placeholder="Tags (comma-separated)"
-      />
-      <button onClick={handleSave}>💾 Save</button>
-      <button onClick={() => navigate('/')}>Cancel</button>
+      <p className="post-tags">
+        <strong>Tags:</strong>{' '}
+        {post.tags.length > 0 ? post.tags.join(', ') : 'No tags'}
+      </p>
+      <a href="/" className="back-link">
+        ⬅ Back to Blog List
+      </a>
     </div>
   );
 };
 
-export default BlogEditorPage;
+export default BlogPostPage;

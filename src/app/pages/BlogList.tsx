@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { fetchPosts } from '../backend/api';
 import { BlogPost } from '../model/BlogPostModel';
 
@@ -11,21 +10,20 @@ const BlogList = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Blog Posts</h2>
-      <button>
-        <Link to="/new">➕ Add New Post</Link>
-      </button>
-      <ul>
+    <div className="blog-list">
+      <button className="add-post-button">➕ Add New Post</button>
+      <div className="post-list">
         {posts.map((post) => (
-          <li key={post.id}>
-            <Link to={`/post/${post.id}`}>{post.title}</Link>
-            <Link to={`/edit/${post.id}`} style={{ marginLeft: '10px' }}>
+          <div key={post.id} className="post-item">
+            <a href={`/post/${post.id}`} className="post-title">
+              {post.title}
+            </a>
+            <a href={`/edit/${post.id}`} className="edit-link">
               ✏️ Edit
-            </Link>
-          </li>
+            </a>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
