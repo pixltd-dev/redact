@@ -58,7 +58,7 @@ function createPost() {
     global $db;
 
     $data = json_decode(file_get_contents("php://input"), true);
-    if (!isset($data["id"], $data["title"], $data["content"])) {
+    if (!isset($data["title"], $data["content"])) {
         echo json_encode(["error" => "Missing id, title, or content"]);
         return;
     }

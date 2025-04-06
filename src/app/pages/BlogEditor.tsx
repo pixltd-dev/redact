@@ -12,6 +12,29 @@ const BlogEditorPage = () => {
   const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
 
+  const modules = {
+    toolbar: [
+      [{ header: '1' }, { header: '2' }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      // Enable image support
+      ['image'],
+      ['clean'],
+    ],
+  };
+
+  const formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'image',
+  ];
+
   useEffect(() => {
     if (id) {
       // Fetch the post if an ID is provided (edit mode)
@@ -56,8 +79,10 @@ const BlogEditorPage = () => {
       <ReactQuill
         value={content}
         onChange={setContent}
-        placeholder="Write your content here..."
+        placeholder="Your amazing post goes here..."
         className="editor-quill"
+        modules={modules}
+        formats={formats}
       />
       <input
         type="text"
