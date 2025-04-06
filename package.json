@@ -12,6 +12,8 @@
     "includedScripts": []
   },
   "dependencies": {
+    "@xeger/quill-image-actions": "^0.7.2",
+    "@xeger/quill-image-formats": "^0.7.2",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-quill": "^2.0.0",

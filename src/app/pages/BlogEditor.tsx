@@ -2,8 +2,13 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { createPost, fetchPostById } from '../backend/api';
 import { BlogPost } from '../model/BlogPostModel';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import Quill's default styling
+import { ImageActions } from '@xeger/quill-image-actions';
+import { ImageFormats } from '@xeger/quill-image-formats';
+
+Quill.register('modules/imageActions', ImageActions);
+Quill.register('modules/imageFormats', ImageFormats);
 
 const BlogEditorPage = () => {
   const { id } = useParams<{ id?: string }>();
@@ -13,6 +18,8 @@ const BlogEditorPage = () => {
   const [tags, setTags] = useState('');
 
   const modules = {
+    imageActions: {},
+    imageFormats: {},
     toolbar: [
       [{ header: '1' }, { header: '2' }],
       ['bold', 'italic', 'underline', 'strike', 'blockquote'],
@@ -20,6 +27,7 @@ const BlogEditorPage = () => {
       // Enable image support
       ['image'],
       ['clean'],
+      [{ align: [] }],
     ],
   };
 
@@ -33,6 +41,8 @@ const BlogEditorPage = () => {
     'list',
     'bullet',
     'image',
+    'align',
+    'float',
   ];
 
   useEffect(() => {
