@@ -21,6 +21,7 @@
   --font-size-title: 28px;
 
   /* Spacing */
+  --spacing-xsmall: 5px;
   --spacing-small: 10px;
   --spacing-medium: 20px;
   --spacing-large: 40px;
@@ -42,6 +43,28 @@ body {
   padding: 0;
   background-color: var(--color-light);
   color: var(--color-text);
+}
+
+p {
+  margin: var(--spacing-xsmall) 0;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.align-center {
+  align-items: center;
 }
 
 button {
@@ -240,7 +263,7 @@ button:hover {
   font-size: var(--font-size-large);
   color: var(--color-dark);
   text-align: center;
-  margin-bottom: var(--spacing-medium);
+  /* margin-bottom: var(--spacing-medium); */
 }
 
 .settings-item {
@@ -363,4 +386,79 @@ button:hover {
 
 .editor-quill .ql-editor:focus {
   outline: none;
+}
+
+.delete-category-button {
+  background-color: var(--color-error);
+  color: white;
+  border: none;
+  padding: var(--spacing-small) var(--spacing-medium);
+  font-size: var(--font-size-medium);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.category-title-input {
+  padding: var(--spacing-small);
+  margin-bottom: var(--spacing-medium);
+  font-size: var(--font-size-medium);
+  border: 1px solid var(--color-light-border);
+  border-radius: var(--border-radius);
+  box-sizing: border-box;
+}
+
+.category-item {
+  align-items: center;
+  background-color: var(--color-light);
+}
+
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.add-category-button {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: var(--spacing-xsmall) var(--spacing-small);
+  font-size: var(--font-size-medium);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: var(--spacing-medium);
+}
+
+.spacer-small {
+  height: var(--spacing-small);
+}
+.spacer-medium {
+  height: var(--spacing-medium);
+}
+.spacer-large {
+  height: var(--spacing-large);
+}
+.spacer-small-horizontal {
+  width: var(--spacing-small);
+}
+.spacer-medium-horizontal {
+  width: var(--spacing-medium);
+}
+.spacer-large-horizontal {
+  width: var(--spacing-large);
+}
+
+.save-button {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: var(--spacing-small) var(--spacing-medium);
+  font-size: var(--font-size-medium);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }

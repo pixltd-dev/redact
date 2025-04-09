@@ -111,50 +111,23 @@ const UserSettingsEditor: React.FC = () => {
   }
 
   return (
-    <div className="user-settings-editor">
-      <h1 className="editor-title">User Settings</h1>
-      <div className="settings-item">
-        <label className="settings-label">
-          <input
-            type="checkbox"
-            checked={settings.showTitle}
-            onChange={handleToggleShowTitle}
-            className="settings-checkbox"
-          />
-          Show Title
-        </label>
-      </div>
-      <h1 className="editor-title">Categories</h1>
-      <div className="settings-item">
-        <div className="categories-list">
-          {categories.map((category, index) => (
-            <div key={category.id} className="category-item">
-              <input
-                type="text"
-                value={category.title}
-                onChange={(e) => {
-                  const updatedCategories = [...categories];
-                  updatedCategories[index] = {
-                    ...category,
-                    title: e.target.value,
-                  };
-                  setCategories(updatedCategories);
-                }}
-                className="category-title-input"
-              />
-              <button
-                onClick={() => {
-                  const updatedCategories = categories.filter(
-                    (_, i) => i !== index
-                  );
-                  setCategories(updatedCategories);
-                }}
-                className="delete-category-button"
-              >
-                X
-              </button>
-            </div>
-          ))}
+    <>
+      <div className="user-settings-editor col justify-center align-center">
+        <h1 className="editor-title">User Settings</h1>
+        <div className="settings-item">
+          <label className="settings-label">
+            <input
+              type="checkbox"
+              checked={settings.showTitle}
+              onChange={handleToggleShowTitle}
+              className="settings-checkbox"
+            />
+            Show Title
+          </label>
+        </div>
+
+        <div className="row justify-center align-center">
+          <h1 className="editor-title">Categories</h1>
           <button
             onClick={() => {
               const newCategory: Category = {
@@ -164,24 +137,56 @@ const UserSettingsEditor: React.FC = () => {
             }}
             className="add-category-button"
           >
-            Add Category
+            +
           </button>
         </div>
+        <div className="settings-item">
+          <div className="categories-list">
+            {categories.map((category, index) => (
+              <div key={category.id} className="category-item">
+                <input
+                  type="text"
+                  value={category.title}
+                  onChange={(e) => {
+                    const updatedCategories = [...categories];
+                    updatedCategories[index] = {
+                      ...category,
+                      title: e.target.value,
+                    };
+                    setCategories(updatedCategories);
+                  }}
+                  className="category-title-input"
+                />
+                <button
+                  onClick={() => {
+                    const updatedCategories = categories.filter(
+                      (_, i) => i !== index
+                    );
+                    setCategories(updatedCategories);
+                  }}
+                  className="delete-category-button"
+                >
+                  X
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+        <button onClick={handleSave} className="save-button">
+          Save changes
+        </button>
       </div>
-
-      <button onClick={handleSave} className="save-button">
-        Save changes
-      </button>
-      <div>
+      <div className="spacer-small" />
+      <div className="user-settings-editor col justify-center align-center">
         <h1 className="editor-title">Database Setup</h1>
         <p className="setup-message">
           Click the button below to check and set up the database.
         </p>
         <button onClick={handleCheckDatabase} className="save-button">
-          Check database
+          Start process
         </button>
       </div>
-    </div>
+    </>
   );
 };
 
