@@ -13,6 +13,8 @@
   --color-muted: #6c757d;
   --color-error: #dc3545;
   --color-text: #495057;
+  --color-success: #28a745;
+  --color-success-hover: #218838;
 
   /* Font Sizes */
   --font-size-small: 14px;
@@ -104,7 +106,6 @@ button:hover {
   margin: 0;
 }
 
-/* Menu */
 .menu {
   display: flex;
   justify-content: center;
@@ -263,7 +264,6 @@ button:hover {
   font-size: var(--font-size-large);
   color: var(--color-dark);
   text-align: center;
-  /* margin-bottom: var(--spacing-medium); */
 }
 
 .settings-item {
@@ -283,7 +283,7 @@ button:hover {
 }
 
 .save-button {
-  background-color: var(--color-primary);
+  background-color: var(--color-success);
   color: white;
   border: none;
   padding: var(--spacing-small) var(--spacing-medium);
@@ -294,7 +294,7 @@ button:hover {
 }
 
 .save-button:hover {
-  background-color: var(--color-primary-hover);
+  background-color: var(--color-success-hover);
 }
 
 .loading {
@@ -329,13 +329,6 @@ button:hover {
   box-shadow: var(--box-shadow);
 }
 
-.editor-title {
-  font-size: var(--font-size-large);
-  color: var(--color-dark);
-  text-align: center;
-  margin-bottom: var(--spacing-medium);
-}
-
 .editor-input {
   width: 100%;
   padding: var(--spacing-small);
@@ -352,7 +345,6 @@ button:hover {
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-/* React Quill Editor */
 .editor-quill {
   margin-bottom: var(--spacing-medium);
   background-color: var(--color-light);
@@ -433,6 +425,19 @@ button:hover {
   margin-bottom: var(--spacing-medium);
 }
 
+.editor-select {
+  width: 100%;
+  padding: var(--spacing-small);
+  margin-bottom: var(--spacing-medium);
+  font-size: var(--font-size-medium);
+  border: 1px solid var(--color-light-border);
+  border-radius: var(--border-radius);
+  box-sizing: border-box;
+}
+
+/* ========================= */
+/* SPACERS */
+/* ========================= */
 .spacer-small {
   height: var(--spacing-small);
 }
@@ -450,113 +455,4 @@ button:hover {
 }
 .spacer-large-horizontal {
   width: var(--spacing-large);
-}
-
-.save-button {
-  background-color: var(--color-primary);
-  color: white;
-  border: none;
-  padding: var(--spacing-small) var(--spacing-medium);
-  font-size: var(--font-size-medium);
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-/* Blog List */
-.blog-list {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: var(--spacing-medium);
-}
-
-.blog-list-title {
-  font-size: var(--font-size-title);
-  color: var(--color-dark);
-  text-align: center;
-  margin-bottom: var(--spacing-large);
-}
-
-.post-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-medium);
-}
-
-.post-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: var(--spacing-medium);
-  border: 1px solid var(--color-light-border);
-  border-radius: var(--border-radius);
-  background-color: var(--color-light);
-  transition: box-shadow 0.3s ease;
-}
-
-.post-item:hover {
-  box-shadow: var(--box-shadow);
-}
-
-.post-content {
-  flex: 1;
-}
-
-.post-title {
-  font-size: var(--font-size-large);
-  color: var(--color-dark);
-  text-decoration: none;
-  font-weight: bold;
-  margin-bottom: var(--spacing-small);
-  display: block;
-}
-
-.post-title:hover {
-  color: var(--color-primary);
-}
-
-.post-excerpt {
-  font-size: var(--font-size-medium);
-  color: var(--color-muted);
-  margin-bottom: var(--spacing-small);
-}
-
-.post-date {
-  font-size: var(--font-size-small);
-  color: var(--color-secondary);
-  margin-bottom: var(--spacing-small);
-}
-
-.post-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-xsmall);
-}
-
-.post-tag {
-  font-size: var(--font-size-small);
-  color: var(--color-primary);
-  background-color: var(--color-light-border);
-  padding: var(--spacing-xsmall) var(--spacing-small);
-  border-radius: var(--border-radius);
-}
-
-.post-actions {
-  display: flex;
-  align-items: center;
-}
-
-.edit-link {
-  font-size: var(--font-size-small);
-  color: var(--color-secondary);
-  text-decoration: none;
-  padding: var(--spacing-small);
-  border: 1px solid var(--color-secondary);
-  border-radius: var(--border-radius);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.edit-link:hover {
-  background-color: var(--color-secondary);
-  color: white;
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { createPost, fetchPostById } from '../backend/api';
+import { createPost, fetchCategories, fetchPostById } from '../backend/api';
 import { BlogPost } from '../model/BlogPostModel';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import Quill's default styling
@@ -61,10 +61,17 @@ const BlogEditorPage = () => {
         }
       });
     }
+
+    setCategories(getHolderCategories());
   }, [id]);
 
   useEffect(() => {
-    setCategories(getHolderCategories());
+    (async () => {
+      const fetchedCategories = await fetchCategories();
+      if (fetchedCategories) {
+        setCategories(fetchedCategories);
+      }
+    })();
   }, []);
 
   const handleSave = async () => {
@@ -116,9 +123,7 @@ const BlogEditorPage = () => {
         onChange={(e) => setCategoryId(Number(e.target.value))}
         className="editor-select"
       >
-        <option value="" disabled>
-          Select a category
-        </option>
+        <option>-</option>
         {categories.map((category) => (
           <option key={category.id} value={category.id}>
             {category.title}
