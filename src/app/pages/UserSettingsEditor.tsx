@@ -67,11 +67,14 @@ const UserSettingsEditor: React.FC = () => {
     try {
       categories.map(async (category) => {
         await createCategory(category);
-        const originalCategory = originalCategories.find(
-          (original) => original.title === category.title
+      });
+
+      originalCategories.map(async (originalCategory) => {
+        const category = categories.find(
+          (cat) => cat.id === originalCategory.id
         );
-        if (!originalCategory) {
-          await deleteCategory(category);
+        if (!category) {
+          await deleteCategory(originalCategory);
         }
       });
     } catch (err) {
@@ -113,7 +116,7 @@ const UserSettingsEditor: React.FC = () => {
   return (
     <>
       <div className="user-settings-editor col justify-center align-center">
-        <h1 className="editor-title">User Settings</h1>
+        <h1 className="editor-title">Settings</h1>
         <div className="settings-item">
           <label className="settings-label">
             <input

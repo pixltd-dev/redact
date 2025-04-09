@@ -183,6 +183,7 @@ export const createCategory = async (category: Category): Promise<boolean> => {
 
 export const deleteCategory = async (category: Category): Promise<boolean> => {
   try {
+    debugger;
     const response = await fetch(`${API_BASE}/categories.php`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },

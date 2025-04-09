@@ -6,7 +6,7 @@ if ($_SERVER['HTTP_HOST'] === 'localhost:8001') { // Only enable CORS in develop
         header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");;
     }
 }
-header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Methods: POST, OPTIONS, GET, DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 $db = new PDO("sqlite:redact.db");
@@ -45,17 +45,23 @@ function updateCategory() {
     if (isset($data["title"])) {
         $title = $data["title"];
 
-        // Check if a category with the same title already exists
-        $stmt = $db->prepare("SELECT id FROM category WHERE title = ?");
-        $stmt->execute([$title]);
-        $existingCategory = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($existingCategory) {
-            // Update the existing category
-            $id = $existingCategory["id"];
+        if (isset($data["id"])) {
+            // Update the existing category by ID
+            $id = $data["id"];
             $stmt = $db->prepare("UPDATE category SET title = ? WHERE id = ?");
             $stmt->execute([$title, $id]);
         } else {
+            // Check if a category with the same title already exists
+            $stmt = $db->prepare("SELECT id FROM category WHERE title = ?");
+            $stmt->execute([$title]);
+            $existingCategory = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($existingCategory) {
+                // Category with the same title exists, return an error
+                echo json_encode(["error" => "Category with the same title already exists"]);
+                return;
+            }
+
             // Insert a new category
             $stmt = $db->prepare("INSERT INTO category (title) VALUES (?)");
             $stmt->execute([$title]);
