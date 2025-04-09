@@ -62,7 +62,7 @@ const App = () => {
             {categories.map((category) => (
               <a
                 key={category.id}
-                href={`/category/${category.id}`}
+                href={`/${category.id}`}
                 className="menu-link"
               >
                 {category.title}
@@ -80,6 +80,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<BlogList />} />
+          <Route path="/:category" element={<BlogList />} />
           <Route path="/post/:id" element={<BlogPost />} />
           <Route path="/new" element={<BlogEditor />} />
           <Route path="/edit/:id" element={<BlogEditor />} />

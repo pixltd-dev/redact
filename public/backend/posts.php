@@ -34,6 +34,7 @@ function getPosts() {
     global $db;
 
     $id = $_GET['id'] ?? null;
+    $categoryID = $_GET['categoryID'] ?? null;
 
     if ($id) {
         // Fetch a single post
@@ -46,7 +47,13 @@ function getPosts() {
         } else {
             echo json_encode(["error" => "Post not found"]);
         }
-    } else {
+    } else if($categoryID) {
+        // Fetch posts by category ID
+        $stmt = $db->prepare("SELECT * FROM posts WHERE categoryID = ? ORDER BY created_at DESC");
+        $stmt->execute([$categoryID]);
+        echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+    } else
+    {
         // Fetch all posts
         $stmt = $db->query("SELECT * FROM posts ORDER BY created_at DESC");
         echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));

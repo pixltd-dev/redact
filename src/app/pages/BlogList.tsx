@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react';
-import { fetchPosts } from '../backend/api';
+import { fetchPosts, fetchPostsByCategory } from '../backend/api';
 import { BlogPost } from '../model/BlogPostModel';
+import { useParams } from 'react-router-dom';
 
 const BlogList = () => {
+  const { category } = useParams<{ category: string }>();
   const [posts, setPosts] = useState<BlogPost[]>([]);
 
   useEffect(() => {
-    fetchPosts().then(setPosts);
+    // Fetch posts based on the category if provided
+    if (category) {
+      fetchPostsByCategory(category).then(setPosts);
+    }
+    // Otherwise, fetch all posts
+    else fetchPosts().then(setPosts);
   }, []);
 
   return (

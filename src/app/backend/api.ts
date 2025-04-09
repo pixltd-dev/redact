@@ -41,6 +41,29 @@ export const fetchPosts = async (): Promise<BlogPost[]> => {
   }
 };
 
+export const fetchPostsByCategory = async (
+  categoryID: string
+): Promise<BlogPost[]> => {
+  try {
+    const response = await fetch(
+      `${API_BASE}/posts.php?categoryID=${categoryID}`
+    );
+    if (!response.ok) throw new Error('Failed to fetch posts by category');
+    const posts: BlogPost[] = await response.json();
+
+    return posts.map((post) => ({
+      ...post,
+      tags:
+        typeof post.tags === 'string'
+          ? (post.tags as string).split(',').map((t) => t.trim())
+          : [],
+    }));
+  } catch (error) {
+    console.error('Error fetching posts by category:', error);
+    return [];
+  }
+};
+
 export const fetchPostById = async (id: string): Promise<BlogPost | null> => {
   try {
     const response = await fetch(`${API_BASE}/posts.php?id=${id}`);
