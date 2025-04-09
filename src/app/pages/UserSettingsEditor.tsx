@@ -112,12 +112,6 @@ const UserSettingsEditor: React.FC = () => {
 
   return (
     <div className="user-settings-editor">
-      <button onClick={handleCheckDatabase} className="save-button">
-        Check database
-      </button>
-      <button onClick={handleSave} className="save-button">
-        Save
-      </button>
       <h1 className="editor-title">User Settings</h1>
       <div className="settings-item">
         <label className="settings-label">
@@ -157,7 +151,7 @@ const UserSettingsEditor: React.FC = () => {
                 }}
                 className="delete-category-button"
               >
-                Delete
+                X
               </button>
             </div>
           ))}
@@ -173,6 +167,19 @@ const UserSettingsEditor: React.FC = () => {
             Add Category
           </button>
         </div>
+      </div>
+
+      <button onClick={handleSave} className="save-button">
+        Save changes
+      </button>
+      <div>
+        <h1 className="editor-title">Database Setup</h1>
+        <p className="setup-message">
+          Click the button below to check and set up the database.
+        </p>
+        <button onClick={handleCheckDatabase} className="save-button">
+          Check database
+        </button>
       </div>
     </div>
   );
