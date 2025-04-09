@@ -64,13 +64,21 @@ const UserSettingsEditor: React.FC = () => {
   };
 
   const handeUpdatedCategories = async () => {
+    const uniqueCategories = categories.filter((category, index, self) => {
+      const trimmedTitle = category.title.trim().toLowerCase();
+      return (
+        index ===
+        self.findIndex((cat) => cat.title.trim().toLowerCase() === trimmedTitle)
+      );
+    });
+
     try {
-      categories.map(async (category) => {
+      uniqueCategories.map(async (category) => {
         await createCategory(category);
       });
 
       originalCategories.map(async (originalCategory) => {
-        const category = categories.find(
+        const category = uniqueCategories.find(
           (cat) => cat.id === originalCategory.id
         );
         if (!category) {
