@@ -11,7 +11,6 @@ const BlogList = () => {
 
   return (
     <div className="blog-list">
-      <button className="add-post-button">➕ Add New Post</button>
       <div className="post-list">
         {posts.map((post) => (
           <div key={post.id} className="post-item">

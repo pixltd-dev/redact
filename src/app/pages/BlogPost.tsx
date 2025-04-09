@@ -47,6 +47,13 @@ const BlogPostPage = () => {
         <strong>Tags:</strong>{' '}
         {post.tags.length > 0 ? post.tags.join(', ') : 'No tags'}
       </p>
+      <p className="post-date">
+        <strong>Published on:</strong>{' '}
+        {new Date(post.created_at ?? '').toLocaleDateString()}
+      </p>
+      <p className="post-category">
+        <strong>Category:</strong> {post.categoryID ?? 'Unknown'}
+      </p>
       <div className="post-actions">
         <button className="edit-button" onClick={() => navigate(`/edit/${id}`)}>
           ✏️ Edit

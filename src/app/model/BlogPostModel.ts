@@ -4,4 +4,5 @@ export interface BlogPost {
   content: string;
   tags: string[];
   created_at?: string;
+  categoryID?: number;
 }

@@ -59,25 +59,30 @@ function createPost() {
 
     $data = json_decode(file_get_contents("php://input"), true);
     if (!isset($data["title"], $data["content"])) {
-        echo json_encode(["error" => "Missing id, title, or content"]);
+        echo json_encode(["error" => "Missing title, or content"]);
         return;
     }
+
+    // Log the received data to the console (for debugging purposes)
+    error_log("Received data: " . json_encode($data));
 
     $id = $data["id"] ?? uniqid(); // Use provided ID or generate a new one
     $title = $data["title"];
     $content = $data["content"];
     $tags = isset($data["tags"]) ? implode(",", $data["tags"]) : "";
+    $categoryID = isset($data["categoryID"]) ? $data["categoryID"] : null;
 
     // Insert or update the post
     $stmt = $db->prepare("
-        INSERT INTO posts (id, title, content, tags) 
-        VALUES (?, ?, ?, ?)
+        INSERT INTO posts (id, title, content, tags, categoryID) 
+        VALUES (?, ?, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET 
             title = excluded.title,
             content = excluded.content,
-            tags = excluded.tags
+            tags = excluded.tags,
+            categoryID = excluded.categoryID
     ");
-    $stmt->execute([$id, $title, $content, $tags]);
+    $stmt->execute([$id, $title, $content, $tags, $categoryID]);
 
     echo json_encode(["success" => true, "id" => $id]);
 }

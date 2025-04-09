@@ -6,6 +6,8 @@ import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import Quill's default styling
 import { ImageActions } from '@xeger/quill-image-actions';
 import { ImageFormats } from '@xeger/quill-image-formats';
+import { Category } from '../model/Category';
+import { getHolderCategories } from '../utils/DataHolder';
 
 Quill.register('modules/imageActions', ImageActions);
 Quill.register('modules/imageFormats', ImageFormats);
@@ -16,6 +18,8 @@ const BlogEditorPage = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tags, setTags] = useState('');
+  const [categoryId, setCategoryId] = useState<number | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const modules = {
     imageActions: {},
@@ -53,16 +57,22 @@ const BlogEditorPage = () => {
           setTitle(post.title);
           setContent(post.content);
           setTags(post.tags?.join(', '));
+          setCategoryId(post.categoryID ?? null);
         }
       });
     }
   }, [id]);
+
+  useEffect(() => {
+    setCategories(getHolderCategories());
+  }, []);
 
   const handleSave = async () => {
     const postData: Omit<BlogPost, 'id'> = {
       title,
       content,
       tags: tags.split(',').map((t) => t.trim()),
+      categoryID: categoryId ?? undefined,
     };
 
     if (id) {
@@ -101,6 +111,20 @@ const BlogEditorPage = () => {
         placeholder="Tags (comma-separated)"
         className="editor-input"
       />
+      <select
+        value={categoryId ?? ''}
+        onChange={(e) => setCategoryId(Number(e.target.value))}
+        className="editor-select"
+      >
+        <option value="" disabled>
+          Select a category
+        </option>
+        {categories.map((category) => (
+          <option key={category.id} value={category.id}>
+            {category.title}
+          </option>
+        ))}
+      </select>
       <div className="editor-buttons">
         <button onClick={handleSave} className="save-button">
           💾 Save

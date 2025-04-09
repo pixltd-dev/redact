@@ -1,7 +1,9 @@
-import { fetchUserSettings } from '../backend/api';
+import { fetchCategories, fetchUserSettings } from '../backend/api';
+import { Category } from '../model/Category';
 import { UserSettings } from '../model/UserSettings';
 
 export let userSettingsHolder: UserSettings | null = null; // Use `null` to explicitly indicate uninitialized state
+export let categoriesHolder: Category[] = [];
 
 export const getHolderUserSettings = async (): Promise<UserSettings> => {
   // Return cached settings if already loaded
@@ -38,4 +40,12 @@ export const setHolderUserSettings = (settings: UserSettings): void => {
 export const clearHolderUserSettings = (): void => {
   userSettingsHolder = null; // Clear in-memory cache
   localStorage.removeItem('userSettings'); // Clear localStorage cache
+};
+
+export const getHolderCategories = (): Category[] => {
+  return categoriesHolder;
+};
+
+export const setHolderCategories = (categories: Category[]): void => {
+  categoriesHolder = categories;
 };

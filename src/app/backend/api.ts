@@ -1,6 +1,11 @@
 import { BlogPost } from '../model/BlogPostModel';
+import { Category } from '../model/Category';
 import { UserSettings } from '../model/UserSettings';
-import { setHolderUserSettings } from '../utils/DataHolder';
+import {
+  categoriesHolder,
+  setHolderCategories,
+  setHolderUserSettings,
+} from '../utils/DataHolder';
 
 const API_BASE =
   process.env.NODE_ENV === 'development'
@@ -120,6 +125,51 @@ export const updateUserSettings = async (
     throw new Error(data.error || 'Failed to update user settings');
   } catch (error) {
     console.error('Error updating user settings:', error);
+    return false;
+  }
+};
+
+export const fetchCategories = async (): Promise<Category[]> => {
+  try {
+    const response = await fetch(`${API_BASE}/categories.php`);
+    if (!response.ok) throw new Error('Failed to fetch categories');
+    const categories: Category[] = await response.json();
+    setHolderCategories(categories);
+    return categories;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return [];
+  }
+};
+
+export const createCategory = async (category: Category): Promise<boolean> => {
+  try {
+    const response = await fetch(`${API_BASE}/categories.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(category),
+    });
+    const data = await response.json();
+    if (data.success) return true;
+    throw new Error(data.error || 'Failed to create category');
+  } catch (error) {
+    console.error('Error creating category:', error);
+    return false;
+  }
+};
+
+export const deleteCategory = async (category: Category): Promise<boolean> => {
+  try {
+    const response = await fetch(`${API_BASE}/categories.php`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(category),
+    });
+    const data = await response.json();
+    if (data.success) return true;
+    throw new Error(data.error || 'Failed to delete category');
+  } catch (error) {
+    console.error('Error deleting category:', error);
     return false;
   }
 };

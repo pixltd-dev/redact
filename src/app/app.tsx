@@ -3,13 +3,20 @@ import BlogList from './pages/BlogList';
 import BlogPost from './pages/BlogPost';
 import BlogEditor from './pages/BlogEditor';
 import { useEffect, useState } from 'react';
-import { checkAndSetupDatabase } from './backend/api';
-import { getHolderUserSettings, userSettingsHolder } from './utils/DataHolder';
+import { checkAndSetupDatabase, fetchCategories } from './backend/api';
+import {
+  categoriesHolder,
+  getHolderCategories,
+  getHolderUserSettings,
+  userSettingsHolder,
+} from './utils/DataHolder';
 import { UserSettings } from './model/UserSettings';
 import UserSettingsEditor from './pages/UserSettingsEditor';
+import { Category } from './model/Category';
 
 const App = () => {
   const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const loadUserSettings = async () => {
     try {
@@ -21,13 +28,27 @@ const App = () => {
     }
   };
 
+  const loadCategories = async () => {
+    try {
+      const categoriesFromBE = await fetchCategories();
+      setCategories(categoriesFromBE);
+    } catch (error) {
+      console.error('Error loading categories:', error);
+    }
+  };
+
   useEffect(() => {
     loadUserSettings();
+    loadCategories();
   }, []);
 
   useEffect(() => {
     loadUserSettings();
   }, [userSettingsHolder]);
+
+  useEffect(() => {
+    setCategories(getHolderCategories());
+  }, [categoriesHolder]);
 
   return (
     <>
@@ -38,11 +59,20 @@ const App = () => {
             <a href="/" className="menu-link">
               Home
             </a>
+            {categories.map((category) => (
+              <a
+                key={category.id}
+                href={`/category/${category.id}`}
+                className="menu-link"
+              >
+                {category.title}
+              </a>
+            ))}
             <a href="/new" className="menu-link">
-              New Post
+              📝
             </a>
             <a href="/admin" className="menu-link">
-              Admin
+              🛠️
             </a>
           </nav>
         </header>
