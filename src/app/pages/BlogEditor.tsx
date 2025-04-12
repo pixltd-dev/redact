@@ -7,9 +7,12 @@ import { ImageActions } from '@xeger/quill-image-actions';
 import { ImageFormats } from '@xeger/quill-image-formats';
 import { Category } from '../model/Category';
 import { getHolderCategories } from '../utils/DataHolder';
+import ImageResize from '../utils/ImageResize';
+// import '../utils/CustomImage'; // Ensure CustomImage is imported so that it registers
 
 Quill.register('modules/imageActions', ImageActions);
 Quill.register('modules/imageFormats', ImageFormats);
+Quill.register('modules/imageResize', ImageResize);
 
 const BlogEditorPage = () => {
   const { id } = useParams<{ id?: string }>();
@@ -21,8 +24,9 @@ const BlogEditorPage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
 
   const modules = {
-    imageActions: {},
+    // imageActions: {},
     imageFormats: {},
+    imageResize: {},
     toolbar: [
       [{ header: '1' }, { header: '2' }],
       ['bold', 'italic', 'underline', 'strike', 'blockquote'],
