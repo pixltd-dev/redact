@@ -54,6 +54,12 @@ const UserSettingsEditor: React.FC = () => {
     }
   };
 
+  const handleToggleShowFullPosts = () => {
+    if (settings) {
+      setSettings({ ...settings, showFullPosts: !settings.showFullPosts });
+    }
+  };
+
   const handleCheckDatabase = async () => {
     try {
       await checkAndSetupDatabase();
@@ -125,7 +131,7 @@ const UserSettingsEditor: React.FC = () => {
     <>
       <div className="user-settings-editor col justify-center align-center">
         <h1 className="editor-title">Settings</h1>
-        <div className="settings-item">
+        <div className="settings-item col">
           <label className="settings-label">
             <input
               type="checkbox"
@@ -134,6 +140,15 @@ const UserSettingsEditor: React.FC = () => {
               className="settings-checkbox"
             />
             Show Title
+          </label>
+          <label className="settings-label">
+            <input
+              type="checkbox"
+              checked={settings.showFullPosts}
+              onChange={handleToggleShowFullPosts}
+              className="settings-checkbox"
+            />
+            Show full posts
           </label>
         </div>
 

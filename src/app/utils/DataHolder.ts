@@ -11,15 +11,6 @@ export const getHolderUserSettings = async (): Promise<UserSettings> => {
     return userSettingsHolder;
   }
 
-  // Check localStorage for cached settings
-  const cachedSettings = localStorage.getItem('userSettings');
-  if (cachedSettings) {
-    userSettingsHolder = JSON.parse(cachedSettings);
-    if (userSettingsHolder) {
-      return userSettingsHolder; // Return cached settings if available
-    }
-  }
-
   // Fetch settings from the backend if not cached
   const fetchedSettings = await fetchUserSettings();
   if (fetchedSettings) {
@@ -34,12 +25,6 @@ export const getHolderUserSettings = async (): Promise<UserSettings> => {
 
 export const setHolderUserSettings = (settings: UserSettings): void => {
   userSettingsHolder = settings; // Update in-memory cache
-  localStorage.setItem('userSettings', JSON.stringify(settings)); // Update localStorage cache
-};
-
-export const clearHolderUserSettings = (): void => {
-  userSettingsHolder = null; // Clear in-memory cache
-  localStorage.removeItem('userSettings'); // Clear localStorage cache
 };
 
 export const getHolderCategories = (): Category[] => {

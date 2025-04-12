@@ -3,22 +3,30 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { fetchPostById, deletePost } from '../backend/api';
 import { BlogPost } from '../model/BlogPostModel';
 
-const BlogPostPage = () => {
+interface BlogPostPageProps {
+  postParameter?: BlogPost | undefined;
+}
+
+const BlogPostPage: React.FC<BlogPostPageProps> = ({ postParameter }) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [post, setPost] = useState<BlogPost | null>(null);
 
   useEffect(() => {
-    if (id) {
-      fetchPostById(id).then((data) => {
-        if (data) {
-          data.tags =
-            typeof data.tags === 'string'
-              ? (data.tags as string).split(',').map((t) => t.trim())
-              : [];
-          setPost(data);
-        }
-      });
+    if (postParameter) {
+      setPost(postParameter);
+    } else {
+      if (id) {
+        fetchPostById(id).then((data) => {
+          if (data) {
+            data.tags =
+              typeof data.tags === 'string'
+                ? (data.tags as string).split(',').map((t) => t.trim())
+                : [];
+            setPost(data);
+          }
+        });
+      }
     }
   }, [id]);
 
@@ -55,16 +63,28 @@ const BlogPostPage = () => {
         <strong>Category:</strong> {post.categoryID ?? 'Unknown'}
       </p>
       <div className="post-actions">
-        <button className="edit-button" onClick={() => navigate(`/edit/${id}`)}>
+        <button
+          className="edit-button"
+          onClick={() => navigate(`/edit/${post.id}`)}
+        >
           ✏️ Edit
         </button>
         <button className="delete-button" onClick={handleDelete}>
           🗑️ Delete
         </button>
       </div>
-      <a href="/" className="back-link">
-        ⬅ Back to Blog List
-      </a>
+      {!postParameter && (
+        <div className="post-actions">
+          <button
+            onClick={() => {
+              navigate(-1);
+            }}
+            className="back-link"
+          >
+            ⬅ Back
+          </button>
+        </div>
+      )}
     </div>
   );
 };
