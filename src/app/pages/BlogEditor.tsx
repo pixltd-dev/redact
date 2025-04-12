@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { createPost, fetchCategories, fetchPostById } from '../backend/api';
 import { BlogPost } from '../model/BlogPostModel';
 import ReactQuill, { Quill } from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; // Import Quill's default styling
 import { ImageActions } from '@xeger/quill-image-actions';
 import { ImageFormats } from '@xeger/quill-image-formats';
 import { Category } from '../model/Category';

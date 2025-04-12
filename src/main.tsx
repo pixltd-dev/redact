@@ -4,6 +4,7 @@ import * as ReactDOM from 'react-dom/client';
 import App from './app/app';
 import { checkAndSetupDatabase } from './app/backend/api';
 import { getHolderUserSettings } from './app/utils/DataHolder';
+import 'react-quill/dist/quill.snow.css'; // Import Quill's default styling
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
