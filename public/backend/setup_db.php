@@ -48,6 +48,15 @@ try {
     )";
     $db->exec($query);
 
+    $query = "CREATE TABLE IF NOT EXISTS user (
+        id INTEGER PRIMARY KEY,
+        user TEXT,
+        password TEXT,
+        email TEXT,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    )";
+    $db->exec($query);
+
     echo json_encode(["success" => true, "message" => "Database setup complete"]);
 } catch (Exception $e) {
     echo json_encode(["success" => false, "error" => $e->getMessage()]);
