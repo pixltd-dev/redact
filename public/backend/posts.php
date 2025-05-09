@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 if ($_SERVER['HTTP_HOST'] === 'localhost:8001') { // Only enable CORS in development
     header("Access-Control-Allow-Origin: *");
 } else {
@@ -62,6 +64,12 @@ function getPosts() {
 
 // 📌 Function to create/update a post
 function createPost() {
+    if (!isset($_SESSION['user'])) {
+        http_response_code(401);
+        echo json_encode(["error" => "Unauthorized"]);
+        exit();
+    }
+
     global $db;
 
     $data = json_decode(file_get_contents("php://input"), true);
@@ -96,6 +104,12 @@ function createPost() {
 
 // 📌 Function to delete a post
 function deletePost() {
+    if (!isset($_SESSION['user'])) {
+        http_response_code(401);
+        echo json_encode(["error" => "Unauthorized"]);
+        exit();
+    }
+
     global $db;
 
     // Decode JSON input

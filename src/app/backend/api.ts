@@ -197,3 +197,10 @@ export const deleteCategory = async (category: Category): Promise<boolean> => {
     return false;
   }
 };
+
+export const logout = async () => {
+  await fetch(`${API_BASE}/user.php`, {
+    method: 'DELETE',
+    credentials: 'include',
+  });
+};

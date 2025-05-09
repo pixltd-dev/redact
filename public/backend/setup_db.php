@@ -53,7 +53,7 @@ try {
         user TEXT,
         password TEXT,
         email TEXT,
-        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP
     )";
     $db->exec($query);
 

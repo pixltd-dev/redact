@@ -2,8 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import BlogList from './pages/BlogList';
 import BlogPost from './pages/BlogPost';
 import BlogEditor from './pages/BlogEditor';
-import { useEffect, useState } from 'react';
-import { checkAndSetupDatabase, fetchCategories } from './backend/api';
+import { use, useEffect, useState } from 'react';
+import { checkAndSetupDatabase, fetchCategories, logout } from './backend/api';
 import {
   categoriesHolder,
   getHolderCategories,
@@ -13,10 +13,14 @@ import {
 import { UserSettings } from './model/UserSettings';
 import UserSettingsEditor from './pages/UserSettingsEditor';
 import { Category } from './model/Category';
+import LoginPage from './pages/LoginPage';
+import AuthGuard from './utils/AuthGuard';
+import { useAuth } from './hooks/useAuth';
 
 const App = () => {
   const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
+  const { isAuthenticated, isLoading } = useAuth();
 
   const loadUserSettings = async () => {
     try {
@@ -50,6 +54,11 @@ const App = () => {
     setCategories(getHolderCategories());
   }, [categoriesHolder]);
 
+  const handleLogout = async () => {
+    await logout();
+    window.location.href = '/';
+  };
+
   return (
     <>
       {userSettings?.showTitle && (
@@ -68,12 +77,25 @@ const App = () => {
                 {category.title}
               </a>
             ))}
-            <a href="/new" className="menu-link">
-              📝
-            </a>
-            <a href="/admin" className="menu-link">
-              🛠️
-            </a>
+
+            {isAuthenticated && (
+              <>
+                <a href="/new" className="menu-link">
+                  📝
+                </a>
+                <a href="/admin" className="menu-link">
+                  🛠️
+                </a>
+                <a className="menu-link" onClick={handleLogout}>
+                  Logout
+                </a>
+              </>
+            )}
+            {!isAuthenticated && (
+              <a href="/login" className="menu-link">
+                🔑
+              </a>
+            )}
           </nav>
         </header>
       )}
@@ -82,9 +104,31 @@ const App = () => {
           <Route path="/" element={<BlogList />} />
           <Route path="/:category" element={<BlogList />} />
           <Route path="/post/:id" element={<BlogPost />} />
-          <Route path="/new" element={<BlogEditor />} />
-          <Route path="/edit/:id" element={<BlogEditor />} />
-          <Route path="/admin" element={<UserSettingsEditor />} />
+          <Route
+            path="/new"
+            element={
+              <AuthGuard>
+                <BlogEditor />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/edit/:id"
+            element={
+              <AuthGuard>
+                <BlogEditor />
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <AuthGuard>
+                <UserSettingsEditor />
+              </AuthGuard>
+            }
+          />
+          <Route path="/login" element={<LoginPage />} />
         </Routes>
       </Router>
     </>
