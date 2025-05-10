@@ -24,6 +24,9 @@ export const getHolderUserSettings = async (): Promise<UserSettings> => {
 };
 
 export const setHolderUserSettings = (settings: UserSettings): void => {
+  if (settings.title && settings.title.trim() !== '') {
+    document.title = settings.title;
+  }
   userSettingsHolder = settings; // Update in-memory cache
 };
 
