@@ -37,6 +37,8 @@ export const fetchPosts = async (): Promise<BlogPost[]> => {
     }));
   } catch (error) {
     console.error('Error fetching posts:', error);
+    await checkAndSetupDatabase();
+    location.reload();
     return [];
   }
 };

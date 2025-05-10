@@ -100,6 +100,9 @@ const UserSettingsEditor: React.FC = () => {
     handeUpdatedCategories();
 
     if (settings) {
+      if (settings.showTitle === undefined) {
+        settings.showTitle = true;
+      }
       try {
         const success = await updateUserSettings(settings);
         if (success) {

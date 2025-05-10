@@ -14,6 +14,7 @@ header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST, OPTIONS, DELETE, PUT, GET");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
+
 $db = new PDO("sqlite:redact.db");
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 

@@ -5,11 +5,14 @@ import { useParams } from 'react-router-dom';
 import { UserSettings } from '../model/UserSettings';
 import { getHolderUserSettings } from '../utils/DataHolder';
 import BlogPostPage from './BlogPost';
+import { useAuth } from '../hooks/useAuth';
 
 const BlogList = () => {
   const { category } = useParams<{ category: string }>();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
+  const { isAuthenticated, isLoading } = useAuth();
+  
 
   useEffect(() => {
     // Fetch posts based on the category if provided
@@ -77,11 +80,12 @@ const BlogList = () => {
                 </div>
               )} */}
             </div>
+            {isAuthenticated && !isLoading && (
             <div className="post-actions">
               <a href={`/edit/${post.id}`} className="edit-link">
                 ✏️ Edit
               </a>
-            </div>
+            </div>)}
           </div>
         ))}
       </div>

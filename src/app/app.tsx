@@ -80,7 +80,7 @@ const App = () => {
 
   return (
     <>
-      {userSettings?.showTitle && (
+      {(userSettings?.showTitle == true || userSettings?.showTitle === undefined) && (
         <header className="header">
           {
             titleElement()
