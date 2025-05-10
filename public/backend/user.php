@@ -61,6 +61,7 @@ function loginOrCreateUser() {
     $data = json_decode(file_get_contents("php://input"), true);
     $username = trim($data['username'] ?? '');
     $password = trim($data['password'] ?? '');
+    $email = trim($data['email'] ?? '');
 
     if (!$username || !$password) {
         http_response_code(400);
@@ -73,9 +74,15 @@ function loginOrCreateUser() {
 
     if ($count === 0) {
         // First user registration
+        if (!$email) {
+            http_response_code(400);
+            echo json_encode(["error" => "Email is required for the first user"]);
+            return;
+        }
+
         $hashed = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $db->prepare("INSERT INTO user (user, password) VALUES (?, ?)");
-        $stmt->execute([$username, $hashed]);
+        $stmt = $db->prepare("INSERT INTO user (user, password, email) VALUES (?, ?, ?)");
+        $stmt->execute([$username, $hashed, $email]);
         $_SESSION['user'] = $username;
         http_response_code(201);
         echo json_encode(["success" => true, "created" => true]);

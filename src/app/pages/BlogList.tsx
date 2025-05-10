@@ -67,7 +67,7 @@ const BlogList = () => {
                 Published on{' '}
                 {new Date(post.created_at || '').toLocaleDateString()}
               </p>
-              {post.tags.length > 0 && (
+              {/* {post.tags.length > 0 && (
                 <div className="post-tags">
                   {post.tags.map((tag, index) => (
                     <span key={index} className="post-tag">
@@ -75,7 +75,7 @@ const BlogList = () => {
                     </span>
                   ))}
                 </div>
-              )}
+              )} */}
             </div>
             <div className="post-actions">
               <a href={`/edit/${post.id}`} className="edit-link">

@@ -1,13 +1,16 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 session_start();
 
-if ($_SERVER['HTTP_HOST'] === 'localhost:8001') { // Only enable CORS in development
-    header("Access-Control-Allow-Origin: *");
+if ($_SERVER['HTTP_HOST'] === 'localhost:8001') {
+    header("Access-Control-Allow-Origin: http://localhost:4200");
 } else {
     if (isset($_SERVER['HTTP_ORIGIN'])) {
-        header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");;
+        header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     }
 }
+header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
@@ -15,6 +18,13 @@ $db = new PDO("sqlite:redact.db");
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $method = $_SERVER['REQUEST_METHOD'];
+
+// Handle preflight (OPTIONS) requests
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
 
 switch ($method) {
     case 'GET':
@@ -44,6 +54,10 @@ function getUserSettings() {
 
 // 📌 Function to update or create user settings
 function updateUserSettings() {
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
+    
     if (!isset($_SESSION['user'])) {
         http_response_code(401);
         echo json_encode(["error" => "Unauthorized"]);

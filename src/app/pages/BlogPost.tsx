@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchPostById, deletePost } from '../backend/api';
 import { BlogPost } from '../model/BlogPostModel';
+import { useAuth } from '../hooks/useAuth';
 
 interface BlogPostPageProps {
   postParameter?: BlogPost | undefined;
@@ -11,6 +12,7 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ postParameter }) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [post, setPost] = useState<BlogPost | null>(null);
+  const { isAuthenticated, isLoading } = useAuth();
 
   useEffect(() => {
     if (postParameter) {
@@ -31,11 +33,11 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ postParameter }) => {
   }, [id]);
 
   const handleDelete = async () => {
-    if (id && window.confirm('Are you sure you want to delete this post?')) {
-      const success = await deletePost(id);
+    if ((id || postParameter?.id) && window.confirm('Are you sure you want to delete this post?')) {
+      const success = await deletePost((id ?? postParameter?.id) || '');
       if (success) {
-        alert('Post deleted successfully!');
-        navigate('/'); // Redirect to the blog list
+        navigate(0); // Force reload to the main page
+        alert('Post deleted successfully!');        
       } else {
         alert('Failed to delete the post.');
       }
@@ -51,10 +53,10 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ postParameter }) => {
         className="post-content"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
-      <p className="post-tags">
+      {/* <p className="post-tags">
         <strong>Tags:</strong>{' '}
         {post.tags.length > 0 ? post.tags.join(', ') : 'No tags'}
-      </p>
+      </p> */}
       <p className="post-date">
         <strong>Published on:</strong>{' '}
         {new Date(post.created_at ?? '').toLocaleDateString()}
@@ -62,6 +64,7 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ postParameter }) => {
       <p className="post-category">
         <strong>Category:</strong> {post.categoryID ?? 'Unknown'}
       </p>
+      {isAuthenticated && !isLoading && (
       <div className="post-actions">
         <button
           className="edit-button"
@@ -69,10 +72,11 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ postParameter }) => {
         >
           ✏️ Edit
         </button>
-        <button className="delete-button" onClick={handleDelete}>
+        <button className="delete-button" onClick={() => handleDelete()}>
           🗑️ Delete
         </button>
       </div>
+      )}
       {!postParameter && (
         <div className="post-actions">
           <button

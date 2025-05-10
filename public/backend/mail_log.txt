@@ -1,0 +1,2 @@
+Password reset for t.ouredniik@gmail.com:
+http://localhost:4200/reset-password?token=f3fe2319223105f2b9ef5b533fe96bbbf003233008d39fff57d76b4cfb86afd3

@@ -57,6 +57,20 @@ try {
     )";
     $db->exec($query);
 
+    $query = "ALTER TABLE user ADD COLUMN reset_token TEXT;
+            ALTER TABLE user ADD COLUMN reset_expires TEXT;";
+    try {
+        $db->exec($query);
+    } catch (PDOException $e) {
+        // Ignore error if column already exists
+        if ($e->getCode() !== 'HY000') {
+            throw $e;
+        }
+    }
+
+
+
+
     echo json_encode(["success" => true, "message" => "Database setup complete"]);
 } catch (Exception $e) {
     echo json_encode(["success" => false, "error" => $e->getMessage()]);

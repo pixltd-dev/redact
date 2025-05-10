@@ -89,6 +89,7 @@ export const createPost = async (
   try {
     const response = await fetch(`${API_BASE}/posts.php`, {
       method: 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(post),
     });
@@ -106,6 +107,7 @@ export const deletePost = async (id: string): Promise<boolean> => {
   try {
     const response = await fetch(`${API_BASE}/posts.php`, {
       method: 'DELETE',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id }),
     });
@@ -140,6 +142,7 @@ export const updateUserSettings = async (
   try {
     const response = await fetch(`${API_BASE}/user_settings.php`, {
       method: 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(settings),
     });
@@ -169,6 +172,7 @@ export const createCategory = async (category: Category): Promise<boolean> => {
   try {
     const response = await fetch(`${API_BASE}/categories.php`, {
       method: 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(category),
     });
@@ -186,6 +190,7 @@ export const deleteCategory = async (category: Category): Promise<boolean> => {
     debugger;
     const response = await fetch(`${API_BASE}/categories.php`, {
       method: 'DELETE',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(category),
     });

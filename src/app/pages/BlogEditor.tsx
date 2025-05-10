@@ -114,13 +114,13 @@ const BlogEditorPage = () => {
         modules={modules}
         formats={formats}
       />
-      <input
+      {/* <input
         type="text"
         value={tags}
         onChange={(e) => setTags(e.target.value)}
         placeholder="Tags (comma-separated)"
         className="editor-input"
-      />
+      /> */}
       <select
         value={categoryId ?? ''}
         onChange={(e) => setCategoryId(Number(e.target.value))}

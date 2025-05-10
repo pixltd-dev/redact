@@ -16,6 +16,8 @@ import { Category } from './model/Category';
 import LoginPage from './pages/LoginPage';
 import AuthGuard from './utils/AuthGuard';
 import { useAuth } from './hooks/useAuth';
+import ResetPasswordPage from './pages/PasswordReset';
+import RequestResetPage from './pages/RequestPasswordReset';
 
 const App = () => {
   const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
@@ -91,11 +93,11 @@ const App = () => {
                 </a>
               </>
             )}
-            {!isAuthenticated && (
+            {/* {!isAuthenticated && (
               <a href="/login" className="menu-link">
                 🔑
               </a>
-            )}
+            )} */}
           </nav>
         </header>
       )}
@@ -129,6 +131,8 @@ const App = () => {
             }
           />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/forgot-password" element={<RequestResetPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
         </Routes>
       </Router>
     </>
