@@ -5,6 +5,8 @@
 This is a lightweight admin interface built with **React + TypeScript** on the frontend and **PHP + SQLite** on the backend. 
 It's designed to manage blog posts and handle basic user authentication securely.
 
+![Redact Screenshot](screen.png)
+
 ## ✨ Features
 
 - Add, edit, view, and list blog posts
