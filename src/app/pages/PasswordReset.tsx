@@ -1,22 +1,22 @@
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const ResetPasswordPage = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
-
+  const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [message, setMessage] = useState('');
 
   const API =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:8001/backend/password.php'
-    : './backend/password.php';
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:8001/backend/password.php'
+      : './backend/password.php';
 
   const handleReset = async () => {
     if (password !== confirm) {
-      setMessage("Passwords do not match");
+      setMessage('Passwords do not match');
       return;
     }
 
@@ -28,7 +28,7 @@ const ResetPasswordPage = () => {
 
     const data = await res.json();
     if (res.ok) {
-      setMessage(data.message || 'Password changed successfully');
+      navigate('/login');
     } else {
       setMessage(data.error || 'Error resetting password');
     }
@@ -38,21 +38,25 @@ const ResetPasswordPage = () => {
 
   return (
     <div>
-      <h2>Reset Your Password</h2>
-      <input
-        type="password"
-        placeholder="New password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Confirm password"
-        value={confirm}
-        onChange={e => setConfirm(e.target.value)}
-      />
-      <button onClick={handleReset}>Reset Password</button>
-      {message && <p>{message}</p>}
+      <div className="user-settings-editor col justify-center align-center">
+        <h1 className="editor-title">Reset Password</h1>
+        <input
+          type="password"
+          placeholder="New password"
+          className="editor-input"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Confirm password"
+          className="editor-input"
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value)}
+        />
+        <button onClick={handleReset}>Reset Password</button>
+        {message && <p className="error-message">{message}</p>}
+      </div>
     </div>
   );
 };

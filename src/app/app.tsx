@@ -61,11 +61,30 @@ const App = () => {
     window.location.href = '/';
   };
 
+  const titleElement = () => {
+    if(userSettings?.encodedLogo)
+    {
+      return (
+        <img
+                src={userSettings?.encodedLogo}
+                alt={userSettings?.title}
+                className="uploaded-logo-preview"
+              />
+      );
+    }
+    if (userSettings?.title) {
+      return <h1 className="header-title">{userSettings?.title}</h1>;
+    }
+    return <h1 className="header-title">My Blog</h1>;
+  }
+
   return (
     <>
       {userSettings?.showTitle && (
         <header className="header">
-          <h1 className="header-title">My Blog</h1>
+          {
+            titleElement()
+          }
           <nav className="menu">
             <a href="/" className="menu-link">
               Home

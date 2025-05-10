@@ -68,12 +68,12 @@ function requestPasswordReset() {
     $stmt->execute([$token, $expires, $email]);
 
     // SEND EMAIL (example output, you should use real email function like PHPMailer)
-    $resetUrl = $_SERVER['HTTP_ORIGIN'] + "/reset-password?token=$token";
+    $resetUrl = $_SERVER['HTTP_ORIGIN'] . "/reset-password?token=$token";
 
     // In production use mail() or a mail service
     file_put_contents("mail_log.txt", "Password reset for $email:\n$resetUrl\n");
 
-    echo json_encode(["message" => "If a user with that email exists, a reset link has been sent."]);
+    echo json_encode(["message" => "If a user with that email exists, a reset link will be sent."]);
 }
 
 function resetPassword() {

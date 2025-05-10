@@ -132,6 +132,67 @@ const UserSettingsEditor: React.FC = () => {
       <div className="user-settings-editor col justify-center align-center">
         <h1 className="editor-title">Settings</h1>
         <div className="settings-item col">
+          <input
+            type="text"
+            value={settings.title}
+            onChange={(e) => {
+              if (settings) {
+                setSettings({ ...settings, title: e.target.value });
+              }
+            }}
+            placeholder="Title"
+            className="editor-input"
+          />
+
+          <h1 className="settings-label">Upload Logo</h1>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={async (e) => {
+              if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                if (file.size > 2 * 1024 * 1024) {
+                  alert('File size exceeds 2MB. Please upload a smaller file.');
+                  return;
+                }
+                reader.onload = () => {
+                  if (settings) {
+                    setSettings({
+                      ...settings,
+                      encodedLogo: reader.result as string,
+                    });
+                  }
+                };
+                reader.readAsDataURL(file);
+              }
+            }}
+            className="file-input"
+          />
+          {settings.encodedLogo && (
+            <>
+              <div className="spacer-small" />
+              <img
+                src={settings.encodedLogo}
+                alt="Uploaded Logo"
+                className="uploaded-logo-preview"
+              />
+              <div className="spacer-small" />
+              <button
+                onClick={() => {
+                  if (settings) {
+                    setSettings({ ...settings, encodedLogo: '' });
+                  }
+                }}
+                className="delete-category-button"
+              >
+                delete
+              </button>
+            </>
+          )}
+
+          <div className="spacer-small" />
+           
           <label className="settings-label">
             <input
               type="checkbox"
