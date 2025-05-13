@@ -1,15 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import BlogList from './pages/BlogList';
 import BlogPost from './pages/BlogPost';
 import BlogEditor from './pages/BlogEditor';
 import { use, useEffect, useState } from 'react';
-import { checkAndSetupDatabase, fetchCategories, logout } from './backend/api';
-import {
-  categoriesHolder,
-  getHolderCategories,
-  getHolderUserSettings,
-  userSettingsHolder,
-} from './utils/DataHolder';
+import { checkAndSetupDatabase, fetchCategories, fetchUserSettings, logout } from './backend/api';
 import { UserSettings } from './model/UserSettings';
 import UserSettingsEditor from './pages/UserSettingsEditor';
 import { Category } from './model/Category';
@@ -18,43 +12,30 @@ import AuthGuard from './utils/AuthGuard';
 import { useAuth } from './hooks/useAuth';
 import ResetPasswordPage from './pages/PasswordReset';
 import RequestResetPage from './pages/RequestPasswordReset';
+import { useAppData } from './utils/AppDataContext';
 
 const App = () => {
-  const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
-  const [categories, setCategories] = useState<Category[]>([]);
   const { isAuthenticated, isLoading } = useAuth();
-
-  const loadUserSettings = async () => {
-    try {
-      const settings = await getHolderUserSettings();
-      setUserSettings(settings);
-      console.log('User settings loaded:', settings);
-    } catch (error) {
-      console.error('Error loading user settings:', error);
-    }
-  };
-
-  const loadCategories = async () => {
-    try {
-      const categoriesFromBE = await fetchCategories();
-      setCategories(categoriesFromBE);
-    } catch (error) {
-      console.error('Error loading categories:', error);
-    }
-  };
+  const { categories, userSettings, setCategories, setUserSettings } = useAppData();
 
   useEffect(() => {
-    loadUserSettings();
-    loadCategories();
+    if(categories.length === 0 || userSettings === null)
+    {
+      loadDataAsync();
+    }
   }, []);
 
-  useEffect(() => {
-    loadUserSettings();
-  }, [userSettingsHolder]);
-
-  useEffect(() => {
-    setCategories(getHolderCategories());
-  }, [categoriesHolder]);
+  const loadDataAsync = async () => {
+    try {
+      var cat = await fetchCategories();
+      var set = await fetchUserSettings();
+      setCategories(cat);
+      setUserSettings(set!);
+    }
+    catch (error) {
+      console.error('Error loading data:', error);
+    }
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -86,27 +67,27 @@ const App = () => {
             titleElement()
           }
           <nav className="menu">
-            <a href="/" className="menu-link">
+            <Link to="/" className="menu-link">
               Home
-            </a>
+            </Link>
             {categories.map((category) => (
-              <a
+              <Link
                 key={category.id}
-                href={`/${category.id}`}
+                to={`/${category.id}`}
                 className="menu-link"
               >
                 {category.title}
-              </a>
+              </Link>
             ))}
 
             {isAuthenticated && (
               <>
-                <a href="/new" className="menu-link">
+                <Link to="/new" className="menu-link">
                   📝
-                </a>
-                <a href="/admin" className="menu-link">
+                </Link>
+                <Link to="/admin" className="menu-link">
                   🛠️
-                </a>
+                </Link>
                 <a className="menu-link" onClick={handleLogout}>
                   Logout
                 </a>
@@ -120,7 +101,6 @@ const App = () => {
           </nav>
         </header>
       )}
-      <Router>
         <Routes>
           <Route path="/" element={<BlogList />} />
           <Route path="/:category" element={<BlogList />} />
@@ -153,7 +133,6 @@ const App = () => {
           <Route path="/forgot-password" element={<RequestResetPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
         </Routes>
-      </Router>
     </>
   );
 };

@@ -6,7 +6,6 @@ import ReactQuill, { Quill } from 'react-quill';
 import { ImageActions } from '@xeger/quill-image-actions';
 import { ImageFormats } from '@xeger/quill-image-formats';
 import { Category } from '../model/Category';
-import { getHolderCategories } from '../utils/DataHolder';
 import ImageResize from '../utils/ImageResize';
 // import '../utils/CustomImage'; // Ensure CustomImage is imported so that it registers
 
@@ -64,8 +63,6 @@ const BlogEditorPage = () => {
         }
       });
     }
-
-    setCategories(getHolderCategories());
   }, [id]);
 
   useEffect(() => {

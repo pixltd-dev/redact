@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react';
 import { fetchPosts, fetchPostsByCategory } from '../backend/api';
 import { BlogPost } from '../model/BlogPostModel';
 import { useParams } from 'react-router-dom';
-import { UserSettings } from '../model/UserSettings';
-import { getHolderUserSettings } from '../utils/DataHolder';
 import BlogPostPage from './BlogPost';
 import { useAuth } from '../hooks/useAuth';
+import { useAppData } from '../utils/AppDataContext';
 
 const BlogList = () => {
   const { category } = useParams<{ category: string }>();
   const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
+  // const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
   const { isAuthenticated, isLoading } = useAuth();
-  
+  const { categories, userSettings } = useAppData();
+
 
   useEffect(() => {
     // Fetch posts based on the category if provided
@@ -31,28 +31,28 @@ const BlogList = () => {
       : textContent;
   };
 
-  const loadUserSettings = async () => {
-    try {
-      const settings = await getHolderUserSettings();
-      setUserSettings(settings);
-      console.log('User settings loaded:', settings);
-    } catch (error) {
-      console.error('Error loading user settings:', error);
-    }
-  };
+  // const loadUserSettings = async () => {
+  //   try {
+  //     const settings = await getHolderUserSettings();
+  //     setUserSettings(settings);
+  //     console.log('User settings loaded:', settings);
+  //   } catch (error) {
+  //     console.error('Error loading user settings:', error);
+  //   }
+  // };
 
   useEffect(() => {
-    loadUserSettings();
+    // loadUserSettings();
   }, []);
 
   return userSettings?.showFullPosts ? (
     <div className="blog-list">
       <div className="post-list">
         {posts.map((post) => (
-          <>
+          <div key={post.id.toString()}>
             <BlogPostPage key={post.id} postParameter={post} />
             <div className="spacer-small"></div>
-          </>
+          </div>
         ))}
       </div>
     </div>
@@ -60,7 +60,7 @@ const BlogList = () => {
     <div className="blog-list">
       <div className="post-list">
         {posts.map((post) => (
-          <div key={post.id} className="post-item">
+          <div key={post.id.toString()} className="post-item">
             <div className="post-content">
               <a href={`/post/${post.id}`} className="post-title">
                 {post.title}

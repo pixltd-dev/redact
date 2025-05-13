@@ -1,11 +1,7 @@
 import { BlogPost } from '../model/BlogPostModel';
 import { Category } from '../model/Category';
 import { UserSettings } from '../model/UserSettings';
-import {
-  categoriesHolder,
-  setHolderCategories,
-  setHolderUserSettings,
-} from '../utils/DataHolder';
+import { useAppData } from '../utils/AppDataContext';
 
 const API_BASE =
   process.env.NODE_ENV === 'development'
@@ -130,7 +126,8 @@ export const fetchUserSettings = async (): Promise<UserSettings | null> => {
     });
     if (!response.ok) throw new Error('Failed to fetch user settings');
     const settings: UserSettings = await response.json();
-    setHolderUserSettings(settings);
+    // const { setCategories, setUserSettings } = useAppData();
+    // setUserSettings(settings);
     return settings;
   } catch (error) {
     console.error('Error fetching user settings:', error);
@@ -162,7 +159,8 @@ export const fetchCategories = async (): Promise<Category[]> => {
     const response = await fetch(`${API_BASE}/categories.php`);
     if (!response.ok) throw new Error('Failed to fetch categories');
     const categories: Category[] = await response.json();
-    setHolderCategories(categories);
+    // const { setCategories } = useAppData();
+    // setCategories(categories);
     return categories;
   } catch (error) {
     console.error('Error fetching categories:', error);
@@ -189,7 +187,6 @@ export const createCategory = async (category: Category): Promise<boolean> => {
 
 export const deleteCategory = async (category: Category): Promise<boolean> => {
   try {
-    debugger;
     const response = await fetch(`${API_BASE}/categories.php`, {
       method: 'DELETE',
       credentials: 'include',

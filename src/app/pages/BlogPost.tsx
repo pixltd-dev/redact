@@ -61,9 +61,9 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ postParameter }) => {
         <strong>Published on:</strong>{' '}
         {new Date(post.created_at ?? '').toLocaleDateString()}
       </p>
-      <p className="post-category">
+      {/* <p className="post-category">
         <strong>Category:</strong> {post.categoryID ?? 'Unknown'}
-      </p>
+      </p> */}
       {isAuthenticated && !isLoading && (
       <div className="post-actions">
         <button

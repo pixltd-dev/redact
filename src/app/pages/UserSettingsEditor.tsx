@@ -8,15 +8,16 @@ import {
   fetchUserSettings,
   updateUserSettings,
 } from '../backend/api';
-import { setHolderUserSettings } from '../utils/DataHolder';
 import { Category } from '../model/Category';
+import { useAppData } from '../utils/AppDataContext';
 
 const UserSettingsEditor: React.FC = () => {
   const [settings, setSettings] = useState<UserSettings | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [workingCategories, setWorkingCategories] = useState<Category[]>([]);
   const [originalCategories, setOriginalCategories] = useState<Category[]>([]);
+  const { setCategories, setUserSettings } = useAppData();
 
   useEffect(() => {
     const loadSettings = async () => {
@@ -36,7 +37,7 @@ const UserSettingsEditor: React.FC = () => {
       try {
         const fetchedCategories = await fetchCategories();
         if (fetchedCategories) {
-          setCategories(fetchedCategories);
+          setWorkingCategories(fetchedCategories);
           setOriginalCategories(fetchedCategories);
         }
       } catch (err) {
@@ -70,7 +71,7 @@ const UserSettingsEditor: React.FC = () => {
   };
 
   const handeUpdatedCategories = async () => {
-    const uniqueCategories = categories.filter((category, index, self) => {
+    const uniqueCategories = workingCategories.filter((category, index, self) => {
       const trimmedTitle = category.title.trim().toLowerCase();
       return (
         index ===
@@ -91,6 +92,8 @@ const UserSettingsEditor: React.FC = () => {
           await deleteCategory(originalCategory);
         }
       });
+
+      setCategories(uniqueCategories);
     } catch (err) {
       setError('Failed to update categories.');
     }
@@ -106,7 +109,7 @@ const UserSettingsEditor: React.FC = () => {
       try {
         const success = await updateUserSettings(settings);
         if (success) {
-          setHolderUserSettings(settings);
+          setUserSettings(settings);
           window.location.reload();
           alert('Settings saved successfully!');
         } else {
@@ -223,7 +226,7 @@ const UserSettingsEditor: React.FC = () => {
               const newCategory: Category = {
                 title: '',
               };
-              setCategories([...categories, newCategory]);
+              setWorkingCategories([...workingCategories, newCategory]);
             }}
             className="add-category-button"
           >
@@ -232,27 +235,27 @@ const UserSettingsEditor: React.FC = () => {
         </div>
         <div className="settings-item">
           <div className="categories-list">
-            {categories.map((category, index) => (
+            {workingCategories.map((category, index) => (
               <div key={category.id} className="category-item">
                 <input
                   type="text"
                   value={category.title}
                   onChange={(e) => {
-                    const updatedCategories = [...categories];
+                    const updatedCategories = [...workingCategories];
                     updatedCategories[index] = {
                       ...category,
                       title: e.target.value,
                     };
-                    setCategories(updatedCategories);
+                    setWorkingCategories(updatedCategories);
                   }}
                   className="category-title-input"
                 />
                 <button
                   onClick={() => {
-                    const updatedCategories = categories.filter(
+                    const updatedCategories = workingCategories.filter(
                       (_, i) => i !== index
                     );
-                    setCategories(updatedCategories);
+                    setWorkingCategories(updatedCategories);
                   }}
                   className="delete-category-button"
                 >

@@ -1,16 +1,16 @@
 import { StrictMode } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import * as ReactDOM from 'react-dom/client';
 import App from './app/app';
 import { checkAndSetupDatabase } from './app/backend/api';
-import { getHolderUserSettings } from './app/utils/DataHolder';
 import 'react-quill/dist/quill.snow.css'; // Import Quill's default styling
+import { AppDataProvider, useAppData } from './app/utils/AppDataContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-function onFirstStart() {
+async function onFirstStart() {
   const isFirstStart = localStorage.getItem('isFirstStart') === null;
 
   if (isFirstStart) {
@@ -24,6 +24,10 @@ onFirstStart();
 
 root.render(
   <StrictMode>
-    <App />
+    <Router>
+    <AppDataProvider>
+      <App />
+    </AppDataProvider>
+    </Router>
   </StrictMode>
 );
