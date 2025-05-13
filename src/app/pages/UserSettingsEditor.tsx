@@ -10,6 +10,7 @@ import {
 } from '../backend/api';
 import { Category } from '../model/Category';
 import { useAppData } from '../utils/AppDataContext';
+import { toast, ToastContainer } from 'react-toastify';
 
 const UserSettingsEditor: React.FC = () => {
   const [settings, setSettings] = useState<UserSettings | null>(null);
@@ -64,7 +65,7 @@ const UserSettingsEditor: React.FC = () => {
   const handleCheckDatabase = async () => {
     try {
       await checkAndSetupDatabase();
-      alert('Database is set up correctly!');
+      toast.success('Database is set up correctly!');
     } catch (err) {
       setError('Failed to check database.');
     }
@@ -114,8 +115,7 @@ const UserSettingsEditor: React.FC = () => {
         const success = await updateUserSettings(settings);
         if (success) {
           setUserSettings(settings);
-          window.location.reload();
-          alert('Settings saved successfully!');
+          toast.success('Settings saved successfully!');   
         } else {
           throw new Error('Failed to save settings.');
         }
@@ -153,6 +153,7 @@ const UserSettingsEditor: React.FC = () => {
 
   return (
     <>
+      
       <div className="user-settings-editor col justify-center align-center">
         <h1 className="editor-title">Settings</h1>
         <div className="settings-item col">
@@ -177,7 +178,7 @@ const UserSettingsEditor: React.FC = () => {
                 const file = e.target.files[0];
                 const reader = new FileReader();
                 if (file.size > 2 * 1024 * 1024) {
-                  alert('File size exceeds 2MB. Please upload a smaller file.');
+                  toast.error('File size exceeds 2MB. Please upload a smaller file.');
                   return;
                 }
                 reader.onload = () => {

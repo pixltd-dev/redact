@@ -14,6 +14,7 @@ import ResetPasswordPage from './pages/PasswordReset';
 import RequestResetPage from './pages/RequestPasswordReset';
 import { useAppData } from './utils/AppDataContext';
 import { BlogListWrapper } from './pages/BlogListWrapper';
+import { ToastContainer } from 'react-toastify';
 
 const App = () => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -62,6 +63,7 @@ const App = () => {
 
   return (
     <>
+    <ToastContainer />
       {(userSettings?.showTitle == true || userSettings?.showTitle === undefined) && (
         <header className="header">
           {

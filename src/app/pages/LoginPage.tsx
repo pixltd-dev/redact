@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { checkAndSetupDatabase } from '../backend/api';
+import { toast } from 'react-toastify';
 
 const API =
   process.env.NODE_ENV === 'development'
@@ -72,7 +73,7 @@ const LoginPage = () => {
   const handleCheckDatabase = async () => {
     try {
       await checkAndSetupDatabase();
-      alert('Database is set up correctly!');
+      toast.success('Database is set up correctly!');
     } catch (err) {
       setError('Failed to check database.');
     }

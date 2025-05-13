@@ -63,10 +63,10 @@ const BlogList = () => {
           <div key={post.id.toString()} className="post-item">
             <div className="post-content">
               <a href={`/post/${post.id}`} className="post-title">
-                {post.title}
+                {post.title || '...'}
               </a>
               <p className="post-excerpt">{getExcerpt(post.content)}</p>
-              <p className="post-date">
+              <p className="post-date-thumbnail">
                 Published on{' '}
                 {new Date(post.created_at || '').toLocaleDateString()}
               </p>

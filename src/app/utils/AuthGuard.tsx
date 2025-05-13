@@ -1,6 +1,8 @@
 import { useAuth } from '../hooks/useAuth';
 import { JSX, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 
 const AuthGuard = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -8,7 +10,7 @@ const AuthGuard = ({ children }: { children: JSX.Element }) => {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      alert("Access denied. Please log in.");
+      toast.error("Access denied. Please log in.");
       navigate('/');
     }
   }, [isAuthenticated, isLoading, navigate]);

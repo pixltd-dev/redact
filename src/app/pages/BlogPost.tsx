@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { fetchPostById, deletePost } from '../backend/api';
 import { BlogPost } from '../model/BlogPostModel';
 import { useAuth } from '../hooks/useAuth';
+import { toast } from 'react-toastify';
 
 interface BlogPostPageProps {
   postParameter?: BlogPost | undefined;
@@ -37,9 +38,9 @@ const BlogPostPage: React.FC<BlogPostPageProps> = ({ postParameter }) => {
       const success = await deletePost((id ?? postParameter?.id) || '');
       if (success) {
         navigate(0); // Force reload to the main page
-        alert('Post deleted successfully!');        
+        toast.success('Post deleted successfully!');
       } else {
-        alert('Failed to delete the post.');
+        toast.error('Failed to delete the post.');
       }
     }
   };
