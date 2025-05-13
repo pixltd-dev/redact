@@ -255,11 +255,18 @@ button:hover {
   color: white;
 }
 
+.post-date {
+  font-size: var(--font-size-small);
+  color: var(--color-muted);
+  display: flex;
+  justify-content: end;
+  margin-right: var(--spacing-small);
+}
+
 .post-actions
 {
   display: flex;
-  justify-content: start;
-  margin-left: -10px;
+  justify-content: end;
 }
 
 /* ========================= */
