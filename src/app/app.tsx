@@ -13,6 +13,7 @@ import { useAuth } from './hooks/useAuth';
 import ResetPasswordPage from './pages/PasswordReset';
 import RequestResetPage from './pages/RequestPasswordReset';
 import { useAppData } from './utils/AppDataContext';
+import { BlogListWrapper } from './pages/BlogListWrapper';
 
 const App = () => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -102,8 +103,9 @@ const App = () => {
         </header>
       )}
         <Routes>
-          <Route path="/" element={<BlogList />} />
-          <Route path="/:category" element={<BlogList />} />
+          <Route path="/" element={<BlogListWrapper />} />
+          <Route path="/:category" element={<BlogListWrapper />} />
+
           <Route path="/post/:id" element={<BlogPost />} />
           <Route
             path="/new"

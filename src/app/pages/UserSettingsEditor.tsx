@@ -71,13 +71,17 @@ const UserSettingsEditor: React.FC = () => {
   };
 
   const handeUpdatedCategories = async () => {
-    const uniqueCategories = workingCategories.filter((category, index, self) => {
-      const trimmedTitle = category.title.trim().toLowerCase();
-      return (
-        index ===
-        self.findIndex((cat) => cat.title.trim().toLowerCase() === trimmedTitle)
-      );
-    });
+    const uniqueCategories = workingCategories.filter(
+      (category, index, self) => {
+        const trimmedTitle = category.title.trim().toLowerCase();
+        return (
+          index ===
+          self.findIndex(
+            (cat) => cat.title.trim().toLowerCase() === trimmedTitle
+          )
+        );
+      }
+    );
 
     try {
       uniqueCategories.map(async (category) => {
@@ -130,7 +134,21 @@ const UserSettingsEditor: React.FC = () => {
   }
 
   if (!settings) {
-    return <div className="no-settings">No settings available.</div>;
+    return (
+      <>
+        <div className="no-settings">No settings available.</div>
+        <div className="spacer-small" />
+        <div className="user-settings-editor col justify-center align-center">
+          <h1 className="editor-title">Database Setup</h1>
+          <p className="setup-message">
+            Click the button below to check and set up the database.
+          </p>
+          <button onClick={handleCheckDatabase} className="save-button">
+            Start process
+          </button>
+        </div>
+      </>
+    );
   }
 
   return (
@@ -198,7 +216,7 @@ const UserSettingsEditor: React.FC = () => {
           )}
 
           <div className="spacer-small" />
-           
+
           <label className="settings-label">
             <input
               type="checkbox"

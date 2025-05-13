@@ -7,7 +7,6 @@ import { ImageActions } from '@xeger/quill-image-actions';
 import { ImageFormats } from '@xeger/quill-image-formats';
 import { Category } from '../model/Category';
 import ImageResize from '../utils/ImageResize';
-// import '../utils/CustomImage'; // Ensure CustomImage is imported so that it registers
 
 Quill.register('modules/imageActions', ImageActions);
 Quill.register('modules/imageFormats', ImageFormats);
