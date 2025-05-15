@@ -20,6 +20,7 @@ const BlogEditorPage = () => {
   const [tags, setTags] = useState('');
   const [categoryId, setCategoryId] = useState<number | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [requestInProgress, setRequestInProgress] = useState(false);
 
   const modules = {
     // imageActions: {},
@@ -74,6 +75,7 @@ const BlogEditorPage = () => {
   }, []);
 
   const handleSave = async () => {
+    setRequestInProgress(true);
     const postData: Omit<BlogPost, 'id'> = {
       title,
       content,
@@ -88,12 +90,18 @@ const BlogEditorPage = () => {
       // Create new post
       await createPost(postData);
     }
-
+    setRequestInProgress(false);
     navigate('/'); // Redirect to the blog list after saving
   };
 
   return (
     <div className="blog-editor">
+      {requestInProgress && (
+        <div className="loading-overlay">
+          <div className="loading-spinner">
+          </div>
+        </div>
+      )}
       <h2 className="editor-title">{id ? 'Edit Post' : 'New Post'}</h2>
       <input
         type="text"
@@ -130,10 +138,10 @@ const BlogEditorPage = () => {
         ))}
       </select>
       <div className="editor-buttons">
-        <button onClick={handleSave} className="save-button">
+        <button onClick={handleSave} className="save-button" disabled={requestInProgress}>
           💾 Save
         </button>
-        <button onClick={() => navigate(-1)} className="cancel-button">
+        <button onClick={() => navigate(-1)} className="cancel-button" disabled={requestInProgress}>
           Cancel
         </button>
       </div>

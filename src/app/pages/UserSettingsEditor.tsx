@@ -19,6 +19,7 @@ const UserSettingsEditor: React.FC = () => {
   const [workingCategories, setWorkingCategories] = useState<Category[]>([]);
   const [originalCategories, setOriginalCategories] = useState<Category[]>([]);
   const { setCategories, setUserSettings } = useAppData();
+  const [requestInProgress, setRequestInProgress] = useState(false);
 
   useEffect(() => {
     const loadSettings = async () => {
@@ -63,12 +64,14 @@ const UserSettingsEditor: React.FC = () => {
   };
 
   const handleCheckDatabase = async () => {
+    setRequestInProgress(true);
     try {
       await checkAndSetupDatabase();
       toast.success('Database is set up correctly!');
     } catch (err) {
       setError('Failed to check database.');
     }
+    setRequestInProgress(false);
   };
 
   const handeUpdatedCategories = async () => {
@@ -105,6 +108,7 @@ const UserSettingsEditor: React.FC = () => {
   };
 
   const handleSave = async () => {
+    setRequestInProgress(true);
     handeUpdatedCategories();
 
     if (settings) {
@@ -123,6 +127,8 @@ const UserSettingsEditor: React.FC = () => {
         setError('Failed to save user settings.');
       }
     }
+
+    setRequestInProgress(false);
   };
 
   if (loading) {
@@ -153,7 +159,12 @@ const UserSettingsEditor: React.FC = () => {
 
   return (
     <>
-      
+      {requestInProgress && (
+        <div className="loading-overlay">
+          <div className="loading-spinner">
+          </div>
+        </div>
+      )}
       <div className="user-settings-editor col justify-center align-center">
         <h1 className="editor-title">Settings</h1>
         <div className="settings-item col">
@@ -284,7 +295,7 @@ const UserSettingsEditor: React.FC = () => {
             ))}
           </div>
         </div>
-        <button onClick={handleSave} className="save-button">
+        <button onClick={handleSave} className="save-button" disabled={requestInProgress}>
           Save changes
         </button>
       </div>
@@ -294,7 +305,7 @@ const UserSettingsEditor: React.FC = () => {
         <p className="setup-message">
           Click the button below to check and set up the database.
         </p>
-        <button onClick={handleCheckDatabase} className="save-button">
+        <button onClick={handleCheckDatabase} className="save-button" disabled={requestInProgress}>
           Start process
         </button>
       </div>
