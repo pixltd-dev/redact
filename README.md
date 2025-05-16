@@ -7,6 +7,8 @@ It's designed to manage blog posts and handle basic user authentication securely
 
 ![Redact Screenshot](screen.png)
 
+![Redact settings Screenshot](screen_settings.png)
+
 ## ✨ Features
 
 - Add, edit, view, and list blog posts

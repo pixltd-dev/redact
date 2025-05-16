@@ -71,7 +71,7 @@ const App = () => {
           }
           <nav className="menu">
             {userSettings?.showHomeCategory === undefined || userSettings?.showHomeCategory === true && (
-              <Link to="/home" className="menu-link">
+              <Link to="/" className="menu-link">
                 Home
               </Link>
             )}
