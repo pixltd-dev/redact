@@ -3,4 +3,5 @@ export interface UserSettings {
   showFullPosts: boolean;
   encodedLogo: string;
   title: string;
+  showHomeCategory: boolean;
 }

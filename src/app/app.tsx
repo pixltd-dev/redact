@@ -70,10 +70,16 @@ const App = () => {
             titleElement()
           }
           <nav className="menu">
-            <Link to="/" className="menu-link">
-              Home
-            </Link>
-            {categories.map((category) => (
+            {userSettings?.showHomeCategory === undefined || userSettings?.showHomeCategory === true && (
+              <Link to="/home" className="menu-link">
+                Home
+              </Link>
+            )}
+
+            {categories
+              .slice()
+              .sort((a, b) => (a.sort_index ?? 0) - (b.sort_index ?? 0))
+              .map((category) => (
               <Link
                 key={category.id}
                 to={`/${category.id}`}

@@ -67,11 +67,18 @@ function updateCategory() {
     if (isset($data["title"])) {
         $title = $data["title"];
 
+        $sortIndex = isset($data["sort_index"]) ? (float)$data["sort_index"] : 10;
+
         if (isset($data["id"])) {
             // Update the existing category by ID
             $id = $data["id"];
+            if ($sortIndex !== null) {
+            $stmt = $db->prepare("UPDATE category SET title = ?, sort_index = ? WHERE id = ?");
+            $stmt->execute([$title, $sortIndex, $id]);
+            } else {
             $stmt = $db->prepare("UPDATE category SET title = ? WHERE id = ?");
             $stmt->execute([$title, $id]);
+            }
         } else {
             // Check if a category with the same title already exists
             $stmt = $db->prepare("SELECT id FROM category WHERE title = ?");
@@ -79,14 +86,19 @@ function updateCategory() {
             $existingCategory = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($existingCategory) {
-                // Category with the same title exists, return an error
-                echo json_encode(["error" => "Category with the same title already exists"]);
-                return;
+            // Category with the same title exists, return an error
+            echo json_encode(["error" => "Category with the same title already exists"]);
+            return;
             }
 
             // Insert a new category
+            if ($sortIndex !== null) {
+            $stmt = $db->prepare("INSERT INTO category (title, sort_index) VALUES (?, ?)");
+            $stmt->execute([$title, $sortIndex]);
+            } else {
             $stmt = $db->prepare("INSERT INTO category (title) VALUES (?)");
             $stmt->execute([$title]);
+            }
         }
 
         echo json_encode(["success" => true]);

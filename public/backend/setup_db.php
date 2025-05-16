@@ -68,8 +68,15 @@ try {
         }
     }
 
-
-
+    $query = "ALTER TABLE category ADD COLUMN sort_index double DEFAULT 10;";
+    try {
+        $db->exec($query);
+    } catch (PDOException $e) {
+        // Ignore error if column already exists
+        if ($e->getCode() !== 'HY000') {
+            throw $e;
+        }
+    }
 
     echo json_encode(["success" => true, "message" => "Database setup complete"]);
 } catch (Exception $e) {
